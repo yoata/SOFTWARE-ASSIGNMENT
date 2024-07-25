@@ -45,7 +45,13 @@ class Game:
 
                 if game_state == "Combat":
                     result = self.game_map.inCombat()
-                
+
+                    if result == "lose":
+                         self.state = 'lose_screen'
+                    
+                    if result == "won combat":
+                         game_state = "Regular"
+
                 if game_state == "Regular":
         
                     result = self.game_map.handle_events()  # Handle events in the game map and get the result

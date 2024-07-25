@@ -31,8 +31,8 @@ class Map:
         self.enemies = [
             Enemy(GAME_ASSETS["goblin"], [50, 50], self.window, name="goblin"),
             Enemy(GAME_ASSETS["orc"], [self.window.get_width() - 120, 50], self.window, name="orc"),
-            Enemy(GAME_ASSETS["skeleton"], [50, self.window.get_height() - 120], self.window, name="skeleton"),
-            Enemy(GAME_ASSETS["skeleton"], [self.window.get_width() - 120, self.window.get_height() - 120], self.window, name="skeleton")
+            Enemy(GAME_ASSETS["skeleton"], [50, self.window.get_height() - 110], self.window, name="The Average American"),
+            Enemy(GAME_ASSETS["skeleton"], [self.window.get_width() - 120, self.window.get_height() - 110], self.window, name="The Average American")
         ]
         self.in_combat = False  # Ensure this attribute is defined in the constructor
         self.current_enemy = None
@@ -41,8 +41,6 @@ class Map:
         self.player_death = False
         self.move_speed = 2
         self.has_chosen_attack = False
-        self.player_turn = True
-        self.enemy_turn = False
         self.heath_bar = None
 
     
@@ -55,7 +53,7 @@ class Map:
         """
         self.player_type = character_type
         self.player_image = self.player_images[character_type]
-        self.player_image = pygame.transform.scale(self.player_image, (int(self.player_image.get_width() * 0.15), int(self.player_image.get_height() * 0.15)))
+        self.player_image = pygame.transform.scale(self.player_image, (int(self.player_image.get_width() * 0.4), int(self.player_image.get_height() * 0.4)))
         
 
         if character_type == "Mage":
@@ -80,20 +78,6 @@ class Map:
                 self.current_enemy = enemy
                 return True
         return False
-
-    def handle_combat(self):
-        enemy_damage = random.randint(15, 40)
-        player_defeated = self.player.take_damage(enemy_damage)
-        print(f"Enemy attacks back! Deals {enemy_damage} damage to the player.")
-        if player_defeated:
-            print("PLAYER DIED")
-            self.in_combat = False
-            self.player_death = True
-            return 'Enemy Turn End'
-        self.enemy_turn = False
-        self.player_turn = True
-        return 'Enemy Turn End'
-            
             
                 
                 
@@ -123,8 +107,18 @@ class Map:
     def inCombat(self):
         self.combat = Combat(self.window, self.player, self.current_enemy)
         self.combat.load_player(self.player_type)
-        self.combat.Turnbased(self.combat)
+        self.combat.load_bars()
         self.combat.draw()
+        result = self.combat.Turnbased()
+        if result == "player death":
+            return "lose"
+        
+        elif result == "Enemy Death":
+            self.player = self.combat.getPlayer()
+            self.enemies.remove(self.current_enemy)
+            self.in_combat = False
+            return "won combat"
+        
         
     def handle_events(self):
         """

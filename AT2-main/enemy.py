@@ -18,12 +18,13 @@ class Enemy:
         self.window = window
         
         # Set the initial health of the enemy to 100
+        
         self.health = 100
+        self.max_health = self.health
 
     def take_damage(self, damage):
         # Reduce the enemy's health by the specified damage amount
         self.health -= damage
-        
         # Return True if the enemy's health is less than or equal to 0, indicating that it is defeated
         return self.health <= 0
     
@@ -44,8 +45,18 @@ class Enemy:
         # Draw the enemy image on the window at the adjusted position
         self.window.blit(self.image, adjusted_position)
 
-    def COMBATDRAW(self):
+    def COMBATDRAW(self, x, y):
         # Adjust the position to ensure the image does not overflow the window boundaries
         # Draw the enemy image on the window at the adjusted position
-        self.window.blit(self.combat_image, (1000, 100))
+        self.window.blit(self.combat_image, (x, y))
+
+    def getHP(self):
+        return self.health
+    
+    def getMaxHP(self):
+        return self.max_health
+    
+    def is_alive(self):
+        if self.health <= 0:
+            return "dead"
 

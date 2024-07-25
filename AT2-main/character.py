@@ -9,7 +9,7 @@ class Character:
         self.armor = armor  # Character's armor value
         self.level = 1  # Character's current level
         self.experience_points = 0
-        self.max_hit_points = 10 # Character's current experience points
+        self.max_hit_points = hit_points # Character's current experience points
         self.hit_points = hit_points  # Example starting value for character's hit points
         self.armor_class = 10  # Example starting value for character's armor class
         self.skills = {}  # Example empty dictionary for character's skills
@@ -56,3 +56,12 @@ class Character:
             return True
         else:
             print(f"{self.name} takes {actual_damage} damage. Remaining hit points: {self.hit_points}")
+
+    def getHit_points(self):
+        return self.hit_points
+    
+    def getMax_Hit_points(self):
+        return self.max_hit_points
+    
+    def healthRegen(self):
+        self.hit_points = self.max_hit_points
